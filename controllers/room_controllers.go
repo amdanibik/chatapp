@@ -32,14 +32,13 @@ func ListRooms(c echo.Context) error {
 func ListChats(c echo.Context) error {
 	var listChats []chats.Chat
 	roomId := c.Param("roomid")
-	userId := c.Param("userid")
 	err := configs.DB.Order("created_at DESC").Find(&listChats, "room_id = ?", roomId).Error
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, chats.ChatResponses{
 			false, "Failed get chats in this room", nil,
 		})
 	}
-	if updateStatus(roomId, userId) == 0 {
+	if updateStatus(roomId) == 0 {
 		return c.JSON(http.StatusInternalServerError, chats.ChatResponses{
 			false, "Failed update status", nil,
 		})
@@ -49,10 +48,10 @@ func ListChats(c echo.Context) error {
 	})
 }
 
-func updateStatus(roomid, userid string) int {
+func updateStatus(roomid string) int {
 	var chatDB chats.Chat
 	chatDB.Status = 1
-	err := configs.DB.Where("status != 1 AND room_id = ?", roomid, userid).Updates(&chatDB).Error
+	err := configs.DB.Where("status != 1 AND room_id = ?", roomid).Updates(&chatDB).Error
 	if err != nil {
 		return 0
 	}
