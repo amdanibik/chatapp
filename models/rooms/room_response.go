@@ -13,14 +13,11 @@ type RoomResponse struct {
 }
 
 type RoomData struct {
-	Id       int    `json:"id"`
-	Sender   string `json:"sender"`
-	Receiver string `json:"receiver"`
-	Unreade  string `json:"unread"`
+	Unreade string `json:"unread"`
 }
 
 type RoomResponsesFull struct {
-	Status  bool       `json:"status"`
-	Message string     `json:"message"`
-	Data    []RoomData `json:"data"`
+	Status  bool     `json:"status"`
+	Message string   `json:"message"`
+	Data    RoomData `json:"data"`
 }
